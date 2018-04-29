@@ -1,0 +1,18 @@
+@App:name("siddhi-io-file test app")
+
+@source(type='file',
+mode='files.repo.line',
+tailing='true',
+file.uri='file:///tmp2/siddhi-all/test.csv',
+@map(type='csv')) 
+define stream CargoStream (weight int);
+
+@sink(type='file',
+file.uri='/result.csv',
+@map(type='csv'))
+define stream OutputStream(weight int, totalWeight long);
+
+@info(name='HelloWorldQuery')
+from CargoStream
+select weight, sum(weight) as totalWeight
+insert into OutputStream;
