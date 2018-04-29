@@ -7,7 +7,9 @@ import org.wso2.siddhi.core.stream.input.InputHandler
 import org.wso2.siddhi.core.stream.output.StreamCallback
 import org.wso2.siddhi.core.util.EventPrinter
 
+// 'commons-io:commons-io:jar:2.6'
 import org.apache.commons.io.FileUtils
+import java.nio.charset.StandardCharsets
 
 object SiddhiStandalone {
 
@@ -32,8 +34,7 @@ object SiddhiStandalone {
 
       case Some(cliArgument) => 
         // println("Correct")
-        println(s"${cliArgument.time}")
-        println(s"${cliArgument.file}")
+        println(s"Running Stream query file ${cliArgument.file} for ${cliArgument.time} seconds")
         runSiddhi(
           FileUtils.readFileToString(cliArgument.file, StandardCharsets.UTF_8),
           cliArgument.time)
@@ -52,5 +53,6 @@ object SiddhiStandalone {
     siddhiAppRuntime.start()
 
     Thread.sleep(duration)
+    siddhiAppRuntime.shutdown()
   }
 }
