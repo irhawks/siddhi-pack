@@ -2,7 +2,7 @@
 
 @source(type='file',
 tailing='false',
-file.uri='file:///tmp2/siddhi-all/test.csv',
+file.uri='file:///tmp/siddhi-all/test.csv',
 file.polling.interval='100',
 @map(type='csv')) 
 define stream CargoStream (weight int);
@@ -10,7 +10,7 @@ define stream CargoStream (weight int);
 -- @sink(type='log', prefix='LOGGER', @map(type='csv'))
 
 @sink(type='file',
-file.uri='file:///tmp2/siddhi-all/res.csv',
+file.uri='file:///tmp/siddhi-all/res.csv',
 @map(type='csv', header='true')) 
 define stream OutputStream(weight int, totalWeight long);
 
