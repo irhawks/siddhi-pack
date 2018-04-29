@@ -1,4 +1,4 @@
-package example
+package org.irhawks.streaming.siddhi
 
 import org.wso2.siddhi.core.SiddhiAppRuntime
 import org.wso2.siddhi.core.SiddhiManager
@@ -7,53 +7,50 @@ import org.wso2.siddhi.core.stream.input.InputHandler
 import org.wso2.siddhi.core.stream.output.StreamCallback
 import org.wso2.siddhi.core.util.EventPrinter
 
-object Hello extends App {
+import org.apache.commons.io.FileUtils
 
-  val query_string1 = """
-  define stream StockEventStream (symbol string, price float, volume long);
-  @info(name = 'query1')
-  from StockEventStream#window.time(5 sec)
-  select symbol, sum(price) as price, sum(volume) as volume
-  group by symbol
-  insert into AggregateStockStream;
-  """
+object SiddhiStandalone {
 
-  val query_string2 = """
-  @source(type='kafka',
-    topic.list='topic1',
-    partition.no.list='0',
-    threading.option='single.thread',
-    group.id="group",
-    bootstrap.servers='192.168.11.187:9092',
-    @map(type='json'))
-  define stream SweetProductionStream (name string, amount double);
+  // option parser
+  import java.io.File
+  case class CliArgument(time: Int = 10*1000, file: File = new File("input.siddhi"))
 
-  @sink(type='kafka',
-    topic='kafka_result_topic',
-    bootstrap.servers='localhost:9092',
-    partition.no='0',
-    @map(type='json'))
-  define stream LowProductionAlertStream (name string, amount double);
+  val parser = new scopt.OptionParser[CliArgument]("SiddhiStandalone") {
+    head("SiddhiStandalone", "0.1.0")
+    opt[Int]('t', "time")
+      .action( (x, c) => c.copy(time=x) )
+      .text("运行时间（默认10分钟）")
 
-  --Send events in a length window of 5 from kafka_topic to kafka_result_topic
-  @info(name='query1')
-  from SweetProductionStream#window.length(5)
-  select *
-  insert into LowProductionAlertStream;
-  """
+      arg[File]("<file>...").unbounded().required()
+        .action( (x,c) => c.copy(file = x))
+        .text("文件名")
+  }
 
-  val siddhiManager = new SiddhiManager()
-  val siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(query_string2) 
+  def main(args: Array[String]) : Unit = {
 
-  siddhiAppRuntime.addCallback("LowProductionAlertStream",
-    new StreamCallback() {
-      override def receive(events : Array[Event]): Unit = {
-        EventPrinter.print(events)
-      }     
-    }) 
-  //Starting event processing
-  siddhiAppRuntime.start()
+    parser.parse(args, CliArgument()) match {
 
-  Thread.sleep(1000)
+      case Some(cliArgument) => 
+        // println("Correct")
+        println(s"${cliArgument.time}")
+        println(s"${cliArgument.file}")
+        runSiddhi(
+          FileUtils.readFileToString(cliArgument.file, StandardCharsets.UTF_8),
+          cliArgument.time)
+
+      case None => println("Error")
+
+    }
+  }
+
+  def runSiddhi(queryString: String, duration: Int = 1000*10) = {
+
+    val siddhiManager = new SiddhiManager()
+    val siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(queryString) 
+
+    // Starting event processing
+    siddhiAppRuntime.start()
+
+    Thread.sleep(duration)
+  }
 }
-

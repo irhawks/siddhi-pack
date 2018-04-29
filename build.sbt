@@ -9,6 +9,7 @@ settings(
         )),
     name := "siddhi-all",
     libraryDependencies += scalaTest % Test,
+    libraryDependencies += "com.github.scopt" %% "scopt" % "3.7.0",
     libraryDependencies ++= Seq(
       "org.wso2.extension.siddhi.execution.string" % "siddhi-execution-string" % "4.0.11",
       "org.wso2.extension.siddhi.execution.math" % "siddhi-execution-math" % "4.0.14",
