@@ -5,6 +5,7 @@ settings(
     inThisBuild(List(
         organization := "com.example",
         scalaVersion := "2.12.6",
+        crossScalaVersions := Seq("2.12.6", "2.11.12"),
         version      := "0.1.0-SNAPSHOT"
         )),
     name := "siddhi-all",
