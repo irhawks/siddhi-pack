@@ -11,7 +11,7 @@ define stream CargoStream (weight int);
 
 @sink(type='file',
 file.uri='file:///tmp2/siddhi-all/res.csv',
-@map(type='csv')) 
+@map(type='csv', header='true')) 
 define stream OutputStream(weight int, totalWeight long);
 
 @info(name='HelloWorldQuery')
