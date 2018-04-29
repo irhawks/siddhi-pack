@@ -12,7 +12,11 @@ settings(
     libraryDependencies += "com.github.scopt" %% "scopt" % "3.7.0",
     libraryDependencies ++= Seq(
       "commons-io" % "commons-io" % "2.6",
-      "org.apache.commons" % "commons-vfs2" % "2.2"
+      "org.apache.commons" % "commons-vfs2" % "2.2",
+      "org.wso2.siddhi" % "siddhi-core" % "4.1.17",
+      "org.wso2.siddhi" % "siddhi-query-api" % "4.1.17",
+      "org.wso2.siddhi" % "siddhi-query-compiler" % "4.1.17",
+      "org.wso2.siddhi" % "siddhi-annotations" % "4.1.17"
     ),
     libraryDependencies ++= Seq(
       "org.wso2.extension.siddhi.execution.string" % "siddhi-execution-string" % "4.0.11",

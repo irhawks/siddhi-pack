@@ -1,15 +1,17 @@
 @App:name("siddhi-io-file test app")
 
 @source(type='file',
-mode='files.repo.line',
-tailing='true',
+tailing='false',
 file.uri='file:///tmp2/siddhi-all/test.csv',
+file.polling.interval='100',
 @map(type='csv')) 
 define stream CargoStream (weight int);
 
+-- @sink(type='log', prefix='LOGGER', @map(type='csv'))
+
 @sink(type='file',
-file.uri='/result.csv',
-@map(type='csv'))
+file.uri='file:///tmp2/siddhi-all/res.csv',
+@map(type='csv')) 
 define stream OutputStream(weight int, totalWeight long);
 
 @info(name='HelloWorldQuery')

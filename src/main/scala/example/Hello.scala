@@ -39,7 +39,7 @@ object SiddhiStandalone {
           FileUtils.readFileToString(cliArgument.file, StandardCharsets.UTF_8),
           cliArgument.time)
 
-      case None => println("Error")
+        case None => println("Error")
 
     }
   }
@@ -49,6 +49,18 @@ object SiddhiStandalone {
     val siddhiManager = new SiddhiManager()
     val siddhiAppRuntime = siddhiManager.createSiddhiAppRuntime(queryString) 
 
+    siddhiAppRuntime.addCallback("CargoStream",
+      new StreamCallback() {
+        override def receive(events : Array[Event]): Unit = { 
+          EventPrinter.print(events)
+        }    
+      }) 
+    siddhiAppRuntime.addCallback("OutputStream",
+      new StreamCallback() {
+        override def receive(events : Array[Event]): Unit = { 
+          EventPrinter.print(events)
+        }    
+      }) 
     // Starting event processing
     siddhiAppRuntime.start()
 
