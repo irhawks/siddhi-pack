@@ -1,17 +1,21 @@
 import Dependencies._
 
+dependencyOverrides += "org.scala-lang.modules" % "scala-xml_2.12" % "1.1.0"
+
 lazy val root = (project in file(".")).
 settings(
     inThisBuild(List(
-        organization := "com.example",
+        organization := "org.irhawks",
         scalaVersion := "2.12.6",
         crossScalaVersions := Seq("2.12.6", "2.11.12"),
         version      := "0.1.0-SNAPSHOT"
         )),
     name := "siddhi-all",
+    dependencyOverrides += "org.scala-lang.modules" % "scala-xml_2.12" % "1.1.0",
     libraryDependencies += scalaTest % Test,
     libraryDependencies += "com.github.scopt" %% "scopt" % "3.7.0",
     libraryDependencies ++= Seq(
+
       "commons-io" % "commons-io" % "2.6",
       "org.apache.commons" % "commons-vfs2" % "2.2",
       "org.wso2.siddhi" % "siddhi-core" % "4.1.17",
